@@ -14,4 +14,4 @@ systemctl daemon-reload
 systemctl enable catalogue
 systemctl start catalogue
 dnf install mongodb-mongosh -y
-mongosh --host localhost </app/db/master-data.js
+mongosh --host mongoDB.dev.vickydevops.online </app/db/master-data.js
