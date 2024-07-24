@@ -1,4 +1,12 @@
 LOG_FILE=/tmp/roboshop.log
+rm -f $LOG_FILE
+
+PRINT(){
+  echo &>>$LOG_FILE
+  echo &>>$LOG_FILE
+  echo "######################## $* ####################"
+  echo $*
+}
 
 NODEJS() {
   echo disable nodeJS Default Version
