@@ -36,7 +36,7 @@ echo Extract App content
 echo download NodeJS Dependencies
   npm install >$LOG_FILE
 
-echo start start servive
+echo start servive
   systemctl daemon-reload >$LOG_FILE
   systemctl enable ${component} >$LOG_FILE
   systemctl restart ${component} >$LOG_FILE
