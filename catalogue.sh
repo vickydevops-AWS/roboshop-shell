@@ -3,7 +3,7 @@ source common.sh
 cp catalogue.service /etc/systemd/system/catalogue.service
 cp Mongo.repo /etc/yum.repos.d/mongo.repo
 
-nodejs
+NODEJS
 
 useradd roboshop
 rm -rf /app

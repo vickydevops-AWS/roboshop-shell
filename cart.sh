@@ -2,7 +2,7 @@ source common.sh
 
 cp cart.service /etc/systemd/system/cart.service
 
-nodejs
+NODEJS
 
 useradd roboshop
 rm -rf /app
