@@ -121,7 +121,7 @@ SCHEMA_SETUP(){
  fi
 
  if [ "$schema_setup" == "MySQL" ]; then
-   PRINT Install MYSQL Client
+   PRINT Install MySQL Client
    dnf install MySQL -y &>>$LOG_FILE
    STAT $?
 
@@ -130,7 +130,7 @@ SCHEMA_SETUP(){
    STAT $?
 
    PRINT Load Master Data
-   mysql -h MySQLSQL.dev.vickydevops.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+   mysql -h MySQL.dev.vickydevops.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
    STAT $?
 
    PRINT Create App Users
