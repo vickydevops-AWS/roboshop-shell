@@ -1,5 +1,6 @@
 LOG_FILE=/tmp/roboshop.log
 rm -f $LOG_FILE
+code_dir=(pwd)
 
 PRINT(){
   echo &>>$LOG_FILE
@@ -9,16 +10,23 @@ PRINT(){
 }
 
 STAT() {
-    if [ $1 -eq 0 ]; then
-      echo -e "\e[32mSUCCESS\e[0m"
-    else
-      echo -e "\e[31mFAILURE\e[0m"
-      echo "Refer the log file for the more information : File path : ${LOG_FILE}"
-      exit $1
-    fi
+  if [ $1 -eq 0 ]; then
+    echo -e "\e[32mSUCCESS\e[0m"
+  else
+    echo -e "\e[31mFAILURE\e[0m"
+    echo "Refer the log file for the more information : File path : ${LOG_FILE}"
+    exit $1
+  fi
 }
 
 APP_PREREQ() {
+  PRINT Adding Application user
+  id roboshop &>>$LOG_FILE
+  if [ $? -ne 0 ]; then
+    useradd roboshop &>>$LOG_FILE
+  fi
+  STAT $?
+
   PRINT remove old content
   rm -rf ${app_path}  &>>$LOG_FILE
   STAT $?
@@ -37,44 +45,101 @@ APP_PREREQ() {
   STAT $?
 }
 
+SYSTEMD_SETUP(){
+  PRINT copy service file
+    cp ${code_dir}/${component}.service /etc/systemd/system/${component}.service &>>$LOG_FILE
+    STAT $?
+
+    PRINT start service
+      systemctl daemon-reload &>>$LOG_FILE
+      systemctl enable ${component} &>>$LOG_FILE
+      systemctl restart ${component} &>>$LOG_FILE
+      STAT $?
+}
+
 NODEJS() {
-  echo disable nodeJS Default Version
+  PRINT disable nodeJS Default Version
   dnf module disable nodejs -y &>>$LOG_FILE
   STAT $?
 
 
-  echo Enable nodeJS 20 Module
+  PRINT Enable nodeJS 20 Module
   dnf module enable nodejs:20 -y &>>$LOG_FILE
   STAT $?
 
-  echo install Nodejs
+  PRINT install Nodejs
   dnf install nodejs -y &>>$LOG_FILE
   STAT $?
 
-  echo copy service file
-  cp ${component}.service /etc/systemd/system/${component}.service &>>$LOG_FILE
-  STAT $?
-
-  echo COpy MongoDB repo file
+  PRINT COpy MongoDB repo file
   cp Mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
   STAT $?
 
-  echo Adding Application user
-  id roboshop &>>$LOG_FILE
-  if [ $? -ne 0 ]; then
-   useradd roboshop &>>$LOG_FILE
-  fi
-  STAT $?
 
 APP_PREREQ
 
-  echo download NodeJS Dependencies
+  PRINT download NodeJS Dependencies
   npm install &>>$LOG_FILE
+  STAT $?
+
+  SCHEMA_SETUP
+  SYSTEMD_SETUP
+
+}
+
+JAVA(){
+
+ PRINT Install Maven and Java
+ dnf install maven -y
  STAT $?
 
-  echo start service
-  systemctl daemon-reload &>>$LOG_FILE
-  systemctl enable ${component} &>>$LOG_FILE
-  systemctl restart ${component} &>>$LOG_FILE
-  STAT $?
+APP_PREREQ
+
+ PRINT Download Dependencies
+ mvn clean package
+ mv target/shipping-1.0.jar shipping.jar
+ STAT $?
+
+ SCHEMA_SETUP
+ SYSTEMD_SETUP
+
 }
+
+SCHEMA_SETUP(){
+ if ["$schema_setup" == "MongoDB"]; then
+  PRINT COpy MongoDB repo file
+  cp Mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
+  STAT $?
+
+  PRINT Install MongoDB Client
+  dnf install mongodb-mongosh -y &>>$LOG_FILE
+  STAT $?
+
+  PRINT Load Master Data
+  mongosh --host mongoDB.dev.vickydevops.online </app/db/master-data.js &>>$LOG_FILE
+  STAT $?
+ fi
+
+ if ["$schema_setup" == "MySQL"]; then
+   PRINT Install MYSQL Client
+   dnf install MySQL -y &>>$LOG_FILE
+   STAT $?
+
+   PRINT Load Schema
+   mysql -h MySQL.dev.vickydevops.online -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+   STAT $?
+
+   PRINT Load Master Data
+   mysql -h MySQLSQL.dev.vickydevops.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+   STAT $?
+
+   PRINT Create App Users
+   mysql -h MySQL.dev.vickydevops.online -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
+   STAT $?
+ fi
+
+  }
+
+
+
+
