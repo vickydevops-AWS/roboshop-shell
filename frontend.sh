@@ -1,6 +1,6 @@
 source common.sh
 component=frontend
-App_Path=/usr/share/nginx/html
+app_path=/usr/share/nginx/html
 
 PRINT disable ngnix default version
 dnf module disable nginx -y &>>$LOG_FILE

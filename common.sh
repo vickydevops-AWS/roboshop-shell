@@ -20,20 +20,20 @@ STAT() {
 
 APP_PREREQ() {
   PRINT remove old content
-  rm -rf ${App_Path} &>>$LOG_FILE
+  rm -rf ${app_path}  &>>$LOG_FILE
   STAT $?
 
   PRINT Create App Directory
-  mkdir  ${App_Path} &>>$LOG_FILE
+  mkdir  ${app_path}  &>>$LOG_FILE
   STAT $?
 
   PRINT Download Application content
-  curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}-v3.zip &>>$LOG_FILE
+  curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}-v3.zip  &>>$LOG_FILE
   STAT $?
 
   PRINT Extract Application content
-  cd ${App_Path}
-  unzip /tmp/${component} .zip &>>$LOG_FILE
+  cd ${app_path}
+  unzip /tmp/${component}.zip  &>>$LOG_FILE
   STAT $?
 }
 
