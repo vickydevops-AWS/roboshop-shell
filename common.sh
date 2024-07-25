@@ -107,7 +107,7 @@ APP_PREREQ
 
 SCHEMA_SETUP(){
  if [ "$schema_setup" == "MongoDB" ]; then
-  PRINT COpy MongoDB repo file
+  PRINT Copy MongoDB repo file
   cp Mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
   STAT $?
 
@@ -122,7 +122,7 @@ SCHEMA_SETUP(){
 
  if [ "$schema_setup" == "MySQL" ]; then
    PRINT Install MySQL Client
-   dnf install MySQL -y &>>$LOG_FILE
+   dnf install mysql -y &>>$LOG_FILE
    STAT $?
 
    PRINT Load Schema
