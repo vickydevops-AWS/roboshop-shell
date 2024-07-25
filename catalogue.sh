@@ -1,5 +1,6 @@
 source common.sh
 component=catalogue
+App_Path=/app
 NODEJS
 
 echo Install MongoDB Client
