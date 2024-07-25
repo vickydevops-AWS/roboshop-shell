@@ -106,7 +106,7 @@ APP_PREREQ
 }
 
 SCHEMA_SETUP(){
- if ["$schema_setup" == "MongoDB"]; then
+ if [ "$schema_setup" == "MongoDB" ]; then
   PRINT COpy MongoDB repo file
   cp Mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
   STAT $?
@@ -120,7 +120,7 @@ SCHEMA_SETUP(){
   STAT $?
  fi
 
- if ["$schema_setup" == "MySQL"]; then
+ if [ "$schema_setup" == "MySQL" ]; then
    PRINT Install MYSQL Client
    dnf install MySQL -y &>>$LOG_FILE
    STAT $?
