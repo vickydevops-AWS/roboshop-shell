@@ -4,7 +4,7 @@ rm -f $LOG_FILE
 PRINT(){
   echo &>>$LOG_FILE
   echo &>>$LOG_FILE
-  echo "######################## $* #######################"
+  echo "######################## $* #######################" &>>$LOG_FILE
   echo $*
 }
 
@@ -14,6 +14,7 @@ STAT() {
     else
       echo -e "\e[31mFAILURE\e[0m"
       echo "Refer the log file for the more information : File path : ${LOG_FILE}"
+      exit $1
     fi
 }
 
