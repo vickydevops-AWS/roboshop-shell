@@ -126,13 +126,13 @@ SCHEMA_SETUP(){
    STAT $?
 
 
-for file in schema master-data app-user; do
+ for file in schema master-data app-user; do
    PRINT Load file - $file.sql
    mysql -h MySQL.dev.vickydevops.online -uroot -pRoboShop@1 < /app/db/$file.sql &>>$LOG_FILE
    STAT $?
-fi
+ fi
 
-  }
+}
 
 
 
