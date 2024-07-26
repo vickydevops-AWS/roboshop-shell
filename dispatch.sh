@@ -1,4 +1,4 @@
-Souce common.sh
+Source common.sh
 component=dispatch
 app_path=/app
 SYSTEMD_SETUP
