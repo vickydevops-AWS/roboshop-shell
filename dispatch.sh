@@ -1,16 +1,16 @@
-Source common.sh
-component=dispatch
-app_path=/app
-SYSTEMD_SETUP
+cp dispatch.service /etc/systemd/system/dispatch.service
 
-PRINT Install golang client
-dnf install golang -y &>>$LOG_FILE
-STAT $?
+dnf install golang -y
+useradd roboshop
+mkdir /app
+curl -L -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip
+cd /app
+unzip /tmp/dispatch.zip
+cd /app
+go mod init dispatch
+go get
+go build
+systemctl daemon-reload
+systemctl enable dispatch
+systemctl restart dispatch
 
-APP_PRERO
-
-print dispatch service
-go mod init dispatch &>>$LOG_FILE
-go get &>>$LOG_FILE
-go build &>>$LOG_FILE
-STAT $?
