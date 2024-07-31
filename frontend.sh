@@ -6,8 +6,8 @@ PRINT disable ngnix default version
 dnf module disable nginx -y &>>$LOG_FILE
 STAT $?
 
-PRINT enable ngnix 24 version
-dnf module enable nginx:1.24 -y &>>$LOG_FILE
+    PRINT enable ngnix 24 version
+    dnf module enable nginx:1.24 -y &>>$LOG_FILE
 STAT $?
 
 PRINT install nginx
